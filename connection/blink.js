@@ -53,7 +53,7 @@ BlinkCharacteristic.prototype.onWriteRequest = function(data, offset, withoutRes
 		
 		if (action == 'blink-led') {
 			
-			var led = new Gpio(4, 'out');
+			var led = new Gpio(27, 'out');
 			
 			var blink = setInterval(function(){
 				led.writeSync(led.readSync() == 0 ? 1 : 0);	

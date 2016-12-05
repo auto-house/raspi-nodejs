@@ -9,9 +9,11 @@ var bleno = require('bleno');
 
 var ConnectionService = require('./connection/connection');
 var DemoService = require('./demo/demo');
+var ScheduleService = require('./schedule/schedule');
 
 var connectionService = new ConnectionService();
 var demoService = new DemoService();
+var scheduleService = new ScheduleService();
 
 bleno.on('stateChange', function(state) {
 	
@@ -30,7 +32,7 @@ bleno.on('advertisingStart', function(error) {
 	console.log('Bleno - ' + (error ? 'Failed to advertise. ' + error : 'Now advertising.') );
 	
 	if (!error) {
-		bleno.setServices([connectionService, demoService]);
+		bleno.setServices([connectionService, demoService, scheduleService]);
 	}
 	
 });
