@@ -12,10 +12,12 @@ var schedule = require('node-schedule');
 
 var ConnectionService = require('./connection/connection');
 var DemoService = require('./demo/demo');
+var MoveService = require('./move/move');
 var ScheduleService = require('./schedule/schedule');
 
 var connectionService = new ConnectionService();
 var demoService = new DemoService();
+var moveService = new MoveService();
 var scheduleService = new ScheduleService();
 
 var savedSchedulesFilePath = './schedule.json';
@@ -63,7 +65,7 @@ bleno.on('advertisingStart', function(error) {
 	console.log('Bleno - ' + (error ? 'Failed to advertise. ' + error : 'Now advertising.') );
 	
 	if (!error) {
-		bleno.setServices([connectionService, demoService, scheduleService]);
+		bleno.setServices([connectionService, demoService, moveService, scheduleService]);
 	}
 	
 });
