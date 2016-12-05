@@ -3,6 +3,7 @@
 //
 
 var os = require('os');
+var fs = require('fs');
 var util = require('util');
 var bleno = require('bleno');
 var Gpio = require('onoff').Gpio;
@@ -74,18 +75,32 @@ ScheduleCharacteristic.prototype.onWriteRequest = function(data, offset, without
 			
 		}
 		
-		var savedSchedulesJSON = JSONFile.readFileSync(scheduleFilePath);
-		
-		console.log(savedSchedulesJSON);
-		console.log('This is ' + savedSchedulesJSON[0].repeat);
-		savedSchedulesJSON.push(json[0]);
-		
-		
-		JSONFile.writeFile(scheduleFilePath, savedSchedulesJSON, function (err) {
+		if (fs.existsSync(scheduleFilePath)) {
 			
-			console.error(err);
-				
-		});
+			console.log('The file exists.');
+			
+			var jsonObj = JSONFile.readFileSync(scheduleFilePath);
+		
+			jsonObj.push(json);
+			
+			JSONFile.writeFile(scheduleFilePath, jsonObj, function (err) {
+				console.error(err);	
+			});
+			
+		}else{
+			
+			console.log('The schedules file does not exist.');
+			
+			var jsonArr = '[]';
+			var jsonObj = JSON.parse(jsonArr);
+			
+			jsonObj.push(json);
+			
+			JSONFile.writeFile(scheduleFilePath, jsonObj, function (err) {
+				console.error(err);	
+			});
+			
+		}
 		
 		callback(this.RESULT_SUCCESS);
 		
