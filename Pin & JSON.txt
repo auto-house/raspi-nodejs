@@ -1,0 +1,38 @@
+Pinagem
+
+Pino Rasp   -----  onoff  -----  oqueh  -----  cor do fio
+    11              17         motor-OPEN
+    12              18         motor-CLOSE
+	1 			    -   	   3vcc           	- vermelho
+	2   			-   	   5vcc           	- laranja
+	6    			-   	   GND            	- preto
+	15    			22   	   in_sen_interno 	- branco
+	16   			23   	   in_sen_externo 	- marrom
+	7   			4   	   in_rele        	- amarelo
+20 ou 39            -          GND              - verde-marinho
+
+
+Json que vem do APP
+
+servico MOVE
+	caracteristica FULL
+		json: action = open || close
+
+servico RELAY
+	caracteristica RELAYCHAR
+		json: action = enable || disable
+
+servico AUTOMATIC
+	caracteristica LDREX
+		json: action = level (valor de 1-6)
+
+servico CONNECTION
+	caracteristica BLINK
+		json: action = blink-led
+	caracteristica DAUTH
+		json: action = blinkLED
+	caracteristica SETUP
+		json: action = setup
+
+servico SCHEDULE
+	caracteristica INCLUDE
