@@ -2,13 +2,15 @@
 // index.js
 //
 //
-// The root file, setups the bleno communication stack.
+// The root file, setups the bluetooth communication stack.
 //
 
 var fs = require('fs');
 var bleno = require('bleno');
 var jsonfile = require('jsonfile');
 var schedule = require('node-schedule');
+
+var handler = require('./handler');
 
 var ConnectionService = require('./connection/connection');
 var DemoService = require('./demo/demo');
@@ -20,33 +22,32 @@ var demoService = new DemoService();
 var moveService = new MoveService();
 var scheduleService = new ScheduleService();
 
-var savedSchedulesFilePath = './schedule.json';
+var scheduledActionsFilePath = './schedule.json';
 
-if (fs.existsSync(savedSchedulesFilePath)) {
+if (fs.existsSync(scheduledActionsFilePath)) {
 			
-	var jsonObj = jsonfile.readFileSync(savedSchedulesFilePath);
-			
-	for (var i = 0; i < jsonObj.length; i++) {
+	var scheduledActions = jsonfile.readFileSync(scheduledActionsFilePath);
+	
+	for (var i = 0; i < scheduledActions.length; i++) {
 		
-		console.log('Scheduling items...');
+		var scheduledAction = scheduledActions[i];
 		
-		var scheduledItem = jsonObj[i];
+		var action = parseInt(scheduledAction.action, 0);
+		var weekdaysToRepeat = scheduledAction.repeat.split(',').map(Number); 
+		var timeComponents = scheduledAction.scheduledTime.split(':');
+		var timeHour = parseInt(timeComponents[0], 0);
+		var timeMinutes = parseInt(timeComponents[1], 0);
 		
 		var rule = new schedule.RecurrenceRule();
-		rule.dayOfWeek = [0, 1, 2, 3, 4, 5, 6, 7];
-		rule.hour = 13;
-		rule.minute = 15;
+		rule.dayOfWeek = weekdaysToRepeat;
+		rule.hour = timeHour;
+		rule.minute = timeMinutes;
 		
-		var job = schedule.scheduleJob(rule, function () {
-			
-			console.log('Execute the action ' + scheduledItem.action + '.');
-			
-		});
+		var job = schedule.scheduleJob(rule, handlerFactory(action));
 		
 	}
-		
+	
 }
-
 
 bleno.on('stateChange', function(state) {
 	
@@ -54,7 +55,7 @@ bleno.on('stateChange', function(state) {
 	
 	if (state === 'poweredOn') {
 		bleno.startAdvertising(bleno.name, [connectionService.uuid]);
-	} else {
+	}else{
 		bleno.stopAdvertising();
 	}
 	
@@ -69,3 +70,21 @@ bleno.on('advertisingStart', function(error) {
 	}
 	
 });
+
+function handlerFactory(action) {
+	
+	return function (e) {
+		
+		if (action == 0 || action == 1) {
+			
+			handler.moveCurtain(action);
+			
+		}else if (act == 2) {
+			
+			handler.blink();
+			
+		}
+		
+	}
+		
+}
