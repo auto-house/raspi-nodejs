@@ -4,7 +4,7 @@ var util = require('util');
 var bleno = require('bleno');
 var Gpio = require('onoff').Gpio;
 var Sleep = require('sleep');
-
+ 
 var Ldr = require('./controllersHW/ldr');
 var LdrContr = new Ldr();
 
