@@ -3,6 +3,10 @@ var os = require('os');
 var util = require('util');
 var bleno = require('bleno');
 var Gpio = require('onoff').Gpio;
+var Sleep = require('sleep');
+
+var Ldr = require('./controllersHW/ldr');
+var LdrContr = new Ldr();
 
 var BlenoDescriptor = bleno.Descriptor;
 var BlenoCharacteristic = bleno.Characteristic;
@@ -48,14 +52,38 @@ LDRExternalCharacteristic.prototype.onWriteRequest = function(data, offset, with
 		
 		var action = json.action;
 		
-		if (action == 'blink-led') {
 			
-			var pin = new Gpio(27, 'out');
+		var bool = true;
+		var ldrLevel = 0;
+		var pin = new Gpio(27, 'out');
 			
-			//criar um while com if ou case, que fica ferificando o valo do ldr e ve se ja esta 
-			//no nivel certo, caso esteja no nivel certo ele abre a cortina e sai do loop.
+		//criar um while com if ou case, que fica ferificando o valo do ldr e ve se ja esta 
+		//no nivel certo, caso esteja no nivel certo ele abre a cortina e sai do loop.
 			
+		while (bool){
+
+			ldrLevel = LdrContr.ldr(pin);
+
+			if (ldrLevel == action){
+
+				var servM = new gpio(23, 'out');
+		
+				console.log('Started moving, open');
+		
+				servM.writeSync(1);		
+				setTimeout(function(){
+					console.log('Hey you...');
+					servM.writeSync(0);
+					servM.unexport();
+					}, 10000);
+
+				bool = false;
+			} 
+
+			Sleep.sleep(60);
 		}
+
+		pin.unexport();
 		
 		callback(this.RESULT_SUCCESS);
 		

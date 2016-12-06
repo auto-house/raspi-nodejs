@@ -3,8 +3,8 @@ var os = require('os');
 var util = require('util');
 var bleno = require('bleno');
 var Gpio = require('onoff').Gpio;
-var Rele = require('./controllersHW/rele')
 
+var Rele = require('./controllersHW/rele')
 var RelayContr = new Rele();
 
 var BlenoDescriptor = bleno.Descriptor;
@@ -51,7 +51,7 @@ RelayCharacteristic.prototype.onWriteRequest = function(data, offset, withoutRes
 		
 		var action = json.action;
 
-		var pin = new gpio(27, 'out'); //mudar pino
+		var pin = new gpio(4, 'out'); //mudar pino
 		
 		if (action == 'enable') {
 			
@@ -62,6 +62,8 @@ RelayCharacteristic.prototype.onWriteRequest = function(data, offset, withoutRes
 			RelayContr.off(pin);
 
 		}
+
+		pin.unexport();
 
 		callback(this.RESULT_SUCCESS);
 		
