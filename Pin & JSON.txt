@@ -33,6 +33,6 @@ servico CONNECTION
 		json: action = blinkLED
 	caracteristica SETUP
 		json: action = setup
- 
+
 servico SCHEDULE
 	caracteristica INCLUDE

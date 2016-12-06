@@ -20,7 +20,7 @@ Ldr.prototype.ldr = function(pin) {
 	while (pin.readSync() == 0){
 		count++;
 	}
- 
+
 	if (count < 120)
 		ret = 3;
 	else if (count >= 120 && count < 1000)
