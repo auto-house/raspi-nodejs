@@ -24,7 +24,7 @@ servico RELAY
 
 servico AUTOMATIC
 	caracteristica LDREX
-		json: action = level (valor de 1-6)
+		json: action = level (valor de 1(pouca luz) a 3(muita luz))
 
 servico CONNECTION
 	caracteristica BLINK
