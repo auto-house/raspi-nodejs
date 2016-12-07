@@ -57,14 +57,12 @@ LDRExternalCharacteristic.prototype.onWriteRequest = function(data, offset, with
 		var ldrLevel = 0;
 		var pin = new Gpio(27, 'out');
 			
-		//criar um while com if ou case, que fica ferificando o valo do ldr e ve se ja esta 
-		//no nivel certo, caso esteja no nivel certo ele abre a cortina e sai do loop.
-			
+
 		while (bool){
 
 			ldrLevel = LdrContr.ldr(pin);
 
-			if (ldrLevel == action){
+			if (ldrLevel >= action){
 
 				var servM = new gpio(23, 'out');
 		
