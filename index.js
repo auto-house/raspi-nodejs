@@ -76,13 +76,9 @@ function handlerFactory(action) {
 	return function (e) {
 		
 		if (action == 0 || action == 1) {
-			
 			handler.moveCurtain(action);
-			
-		}else if (act == 2) {
-			
-			handler.blink();
-			
+		}else if (action == 2) {
+			handler.blinkLED();
 		}
 		
 	}

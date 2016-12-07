@@ -34,16 +34,12 @@ var FullCharacteristic = function() {
 
 FullCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
 	
-	console.log('Move Service - Full Characteristic - Write Request.');
-    
 	if (offset) {
 		
-		console.log('Move Service - Full Characteristic - Result attribute not long enoght.');
 		callback(this.RESULT_ATTR_NOT_LONG);
 		
 	} else if (data.length > 50) {
 		
-		console.log('Move Service - Full Characteristic - Data length over specified limit.');
 		callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
 		
 	} else {
@@ -55,16 +51,12 @@ FullCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResp
 		
 		var led = new gpio((action == 'open' ? 17 : 18), 'out');
 		
-		console.log('Started moving... ' + action + ',' + (action == 'open' ? 17 : 18) + '.');
-		
 		led.writeSync(1);		
+		
 		setTimeout(function(){
-			console.log('Hey you...');
 			led.writeSync(0);
 			led.unexport();
-		}, 10000);
-			
-		console.log('Finished moving...');
+		}, 10*1000);
 		
 		callback(this.RESULT_SUCCESS);
 		
